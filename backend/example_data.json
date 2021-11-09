@@ -1,0 +1,450 @@
+[
+	{
+		"date": "Saturday October 23",
+		"time": "6:00pm",
+		"team_1": {
+			"full_name": "Atlanta",
+			"short_name": "ATL",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Cleveland",
+			"short_name": "CLE",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Saturday October 23",
+		"time": "7:00pm",
+		"team_1": {
+			"full_name": "Miami",
+			"short_name": "MIA",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Indiana",
+			"short_name": "IND",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Saturday October 23",
+		"time": "7:30pm",
+		"team_1": {
+			"full_name": "Dallas",
+			"short_name": "DAL",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Toronto",
+			"short_name": "TOR",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Saturday October 23",
+		"time": "8:00pm",
+		"team_1": {
+			"full_name": "Detroit",
+			"short_name": "DET",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Chicago",
+			"short_name": "CHI",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Saturday October 23",
+		"time": "8:00pm",
+		"team_1": {
+			"full_name": "New Orleans",
+			"short_name": "NOP",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Minnesota",
+			"short_name": "MIN",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Saturday October 23",
+		"time": "8:30pm",
+		"team_1": {
+			"full_name": "Milwaukee",
+			"short_name": "MIL",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "San Antonio",
+			"short_name": "SAN",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Saturday October 23",
+		"time": "10:00pm",
+		"team_1": {
+			"full_name": "Phoenix",
+			"short_name": "PHO",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Portland",
+			"short_name": "POR",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Saturday October 23",
+		"time": "10:30pm",
+		"team_1": {
+			"full_name": "Memphis",
+			"short_name": "MEM",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "LA Clippers",
+			"short_name": "LAC",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Sunday October 24",
+		"time": "4:00pm",
+		"team_1": {
+			"full_name": "Charlotte",
+			"short_name": "CHR",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Brooklyn",
+			"short_name": "BKN",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Sunday October 24",
+		"time": "7:00pm",
+		"team_1": {
+			"full_name": "Boston",
+			"short_name": "BOS",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Houston",
+			"short_name": "HOU",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Sunday October 24",
+		"time": "7:00pm",
+		"team_1": {
+			"full_name": "Orlando",
+			"short_name": "ORL",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "New York",
+			"short_name": "NY",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Sunday October 24",
+		"time": "7:00pm",
+		"team_1": {
+			"full_name": "Philadelphia",
+			"short_name": "PHI",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Oklahoma City",
+			"short_name": "OKC",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Sunday October 24",
+		"time": "9:00pm",
+		"team_1": {
+			"full_name": "Golden State",
+			"short_name": "GS",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "Sacramento",
+			"short_name": "SAC",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	},
+	{
+		"date": "Sunday October 24",
+		"time": "9:30pm",
+		"team_1": {
+			"full_name": "Memphis",
+			"short_name": "MEM",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-105",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		},
+		"team_2": {
+			"full_name": "LA Lakers",
+			"short_name": "LAL",
+			"odds": {
+				"opening": "-110",
+				"bovada": "-115",
+				"betonline": "-110",
+				"intertops": "-110",
+				"sportsbetting": "-110",
+				"betnow": "-110",
+				"mybookie": "-110",
+				"gtbets": "-109"
+			}
+		}
+	}
+]
