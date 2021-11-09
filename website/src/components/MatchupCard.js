@@ -25,10 +25,6 @@ const MatchupCard = ({ matchup }) => {
 
 	let team1WinPct = (matchup.team_1.win_probability * 100).toFixed(0);
 	let team2WinPct = (matchup.team_2.win_probability * 100).toFixed(0);
-	let team1ImagePath =
-		"../../../img/nba-logos/" + matchup.team_1.full_name + ".png";
-	let team2ImagePath =
-		"../../../img/nba-logos/" + matchup.team_2.full_name + ".png";
 
 	return (
 		<div class="game-card">
@@ -40,14 +36,14 @@ const MatchupCard = ({ matchup }) => {
 
 			<div class="teams">
 				<div class="team">
-					<img src={team1ImagePath} alt={matchup.team_1.short_name} />
+					<img src={matchup.team_1.logo} alt={matchup.team_1.full_name} />
 					<p>{matchup.team_1.full_name}</p>
 				</div>
 				<div class="divider">
 					<p>@</p>
 				</div>
 				<div class="team">
-					<img src={team2ImagePath} alt={matchup.team_2.short_name} />
+					<img src={matchup.team_2.logo} alt={matchup.team_2.full_name} />
 					<p>{matchup.team_2.full_name}</p>
 				</div>
 			</div>
