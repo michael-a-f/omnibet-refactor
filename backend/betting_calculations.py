@@ -42,7 +42,11 @@ def optimal_odd_to_bet(odds_dict):
     is going to be the largest odd i.e. the odd that thinks they are most 
     likely to lose.
     """
-    return max([odd for odd in odds_dict.values() if odd])
+    odds = [odd for odd in odds_dict.values() if odd]
+    if len(odds) == 0:
+        return None
+    else:
+        return max(odds)
 
 
 def money_multiplier(odd):
