@@ -132,7 +132,7 @@ def get_odds(page, books, selectors):
         return bc.get_fake_data()
 
 
-def get_matchup_data(page_html, selectors):
+def get_matchup_data(page_html, sport, selectors):
     """Return JSON for the team and game date/time for each matchup.
         
         Arguments:
@@ -168,6 +168,7 @@ def get_matchup_data(page_html, selectors):
         
             # Create the JSON object
             match_data = {
+                "sport": sport,
                 "date": gamedate,
                 "time": gametime,
                 "team_1": team_1_data,
@@ -210,7 +211,7 @@ def get_scraped_json(sport_league):
         return bc.get_fake_data() 
     
     # Get list of JSON objects for each game's info.
-    match_data = get_matchup_data(page_html, SELECTORS)
+    match_data = get_matchup_data(page_html, sport_league, SELECTORS)
 
     # Get list of sportsbooks to scrape odds from.
     scraped_book_names = []
