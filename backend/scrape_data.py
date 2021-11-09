@@ -74,13 +74,18 @@ def create_odds_object(books, odds_array):
             odds_at[book] = int(odds_array[i])
         except:
             odds_at[book] = None
-        # if odds_array[i] == "":
-        #     odds_at[book] = None
-        # else:
-        #     odds_at[book] = int(odds_array[i])
         i += 1
     return odds_at
 
+
+def scrape_odds_from_container(container):
+    odds = json.loads(container['data-op-moneyline'])
+    fullgame_odds = odds['fullgame']
+    if fullgame_odds != "":
+        return int(fullgame_odds)
+    else:
+        return None
+    
 
 def get_odds(page, books, selectors):
     """Return the odds for a given page
@@ -94,37 +99,40 @@ def get_odds(page, books, selectors):
     Returns:
     List of lists in format [t1 odds, t2 odds] for each matchup.
     """
-    all_odds = []
+    json_odds = []
     try:
-        for match in page.select(selectors["odds"]):
-            t1_odds_list = []
-            t2_odds_list = []
+        game_odds_containers = page.select(selectors["odds"])
+
+        # Iterate over every game
+        for game_odds_container in game_odds_containers:
+            game_odds = {}
+
+            # If no odds, create an empty odds JSON object.
+            game_has_no_odds = 'no-odds-wrapper' in game_odds_container['class']
+            if game_has_no_odds:
+                game_odds["team1"] = game_odds["team2"] = {books[i]: None for i in range(len(books))}
             
-            if 'no-odds-wrapper' in match["class"]:
-                t1_odds_list = [""] * len(books)
-                t2_odds_list = [""] * len(books)
-                t1_odds = create_odds_object(books, t1_odds_list)
-                t2_odds = create_odds_object(books, t2_odds_list)
+            # If odds exist, scrape them and create odds JSON object for team 1 and team 2
             else:
-                for odd in match.select(selectors["team_1_odds"]):
-                    moneyline = json.loads(odd['data-op-moneyline'])["fullgame"]
-                    t1_odds_list.append(moneyline.strip())
-                t2_odds_list = []
-                for odd in match.select(selectors["team_2_odds"]):
-                    moneyline = json.loads(odd['data-op-moneyline'])["fullgame"]
-                    t2_odds_list.append(moneyline.strip())
-                t1_odds = create_odds_object(books, t1_odds_list)
-                t2_odds = create_odds_object(books, t2_odds_list)
-            
-            all_odds.append([t1_odds, t2_odds])
+                t1_containers = game_odds_container.select(selectors["team_1_odds"])
+                t1_odds = [scrape_odds_from_container(container) for container in t1_containers]
+                game_odds["team1"] = {books[i]: t1_odds[i] for i in range(len(books))}
+                
+                t2_containers = game_odds_container.select(selectors["team_2_odds"])
+                t2_odds = [scrape_odds_from_container(container) for container in t2_containers]
+                game_odds["team2"] = {books[i]: t2_odds[i] for i in range(len(books))}
+                # print(json.dumps(game_odds, indent=4))
+                
+            # Add the odds JSON object to the list
+            json_odds.append(game_odds)
         print('Odds scraped successfully.')
-        return all_odds
+        return json_odds
     except:
         print('Error scraping odds.  Returned fake data.')
         return bc.get_fake_data()
 
 
-def get_matchup_data(page, selectors):
+def get_matchup_data(page_html, selectors):
     """Return JSON for the team and game date/time for each matchup.
         
         Arguments:
@@ -136,21 +144,39 @@ def get_matchup_data(page, selectors):
         """
     all_matchups = []
     try:
-        for matchup in page.find_all('div', class_= selectors["matchups"]):
-            if selectors["gamedates"] in matchup.previous_sibling['class']:
-                gamedate = json.loads(matchup.previous_sibling['data-op-date'])["full_date"]
-            gametime = matchup.find('div', class_= selectors["gametimes"]).get_text() + 'm'
-            team_1_info = matchup.find('div', class_= selectors["team_1_info"])
-            team_1 = json.loads(team_1_info['data-op-name'])
-            team_2_info = matchup.find('div', class_= selectors["team_2_info"])
-            team_2 = json.loads(team_2_info['data-op-name'])
+        matchup_containers = page_html.find_all('div', class_= selectors["matchups"])
+        for matchup_container in matchup_containers:
+
+            # Get the date to use for the matchup
+            container_above = matchup_container.previous_sibling
+            classlist_of_container_above = container_above['class']
+            is_date_new = selectors["gamedates"] in classlist_of_container_above
+            if is_date_new:
+                date_json = json.loads(container_above['data-op-date'])
+                gamedate = date_json["full_date"]
+
+            # Get the time to use for the matchup
+            gametime = matchup_container.find('div', class_= selectors["gametimes"]).get_text()
+
+            # Get team 1 info
+            team_1_container = matchup_container.find('div', class_= selectors["team_1_info"])
+            team_1_data = json.loads(team_1_container['data-op-name'])
+
+            # Get team 2 info
+            team_2_container = matchup_container.find('div', class_= selectors["team_2_info"])
+            team_2_data = json.loads(team_2_container["data-op-name"])
+        
+            # Create the JSON object
             match_data = {
                 "date": gamedate,
                 "time": gametime,
-                "team_1": team_1,
-                "team_2": team_2
+                "team_1": team_1_data,
+                "team_2": team_2_data
             }
+
+            # Append to list
             all_matchups.append(match_data)
+
         print('Matchups scraped successfully.')
         return all_matchups
     except:
@@ -174,6 +200,7 @@ def get_scraped_json(sport_league):
     
     # Send the request and if exception, use fake API data.
     http_response = requests.get(url_to_scrape)
+    
     try:
         http_response.raise_for_status()
         page_html = BeautifulSoup(http_response.content, 'html.parser')
@@ -188,9 +215,9 @@ def get_scraped_json(sport_league):
     # Get list of sportsbooks to scrape odds from.
     scraped_book_names = []
     try:
-        books_on_page = page_html.select(SELECTORS["sportsbooks"])
-        for sportsbook_img in books_on_page:
-            name = sportsbook_img['alt'].lower().strip()
+        sportsbook_images = page_html.select(SELECTORS["sportsbooks"])
+        for image in sportsbook_images:
+            name = image['alt'].lower().strip()
             scraped_book_names.append(name)
         print('Sportsbook names scraped successfully.')
     except:
@@ -201,33 +228,60 @@ def get_scraped_json(sport_league):
     match_odds = get_odds(page_html, scraped_book_names, SELECTORS)
     
     # Every game object needs a corresponding odds object.
-    scraping_error = len(match_odds) != len(match_data)
+    is_scraped_correctly = len(match_odds) == len(match_data)
     
-    if scraping_error:
-        print('Error formatting final JSON data.  Returned fake data.')
-        return bc.get_fake_data() 
-    else:
+    if is_scraped_correctly:
         game_counter = 0
         for match in match_data:
-            # Attach odds objects to their game object.
-            team_1_odds = match_odds[game_counter][0]
-            team_2_odds = match_odds[game_counter][1]
+            # Get odds objects for that match.
+            team_1_odds = match_odds[game_counter]["team1"]
+            team_2_odds = match_odds[game_counter]["team2"]
             
-            # Calculate and add dict entries for team 1
+            # Attach odds object to its match object
             match['team_1']['odds'] = team_1_odds
-            match["team_1"]["win_probability"] = bc.win_probability_from_odds(team_1_odds)
-            optimal_t1_bet = bc.optimal_odd_to_bet(team_1_odds)
-            match["team_1"]["money_multiplier"] = bc.money_multiplier(optimal_t1_bet)
-            
-            # Calculate and add dict entries for team 2
             match['team_2']['odds'] = team_2_odds
+            
+            # Add entries for teams' win probabilities
+            match["team_1"]["win_probability"] = bc.win_probability_from_odds(team_1_odds)
             match["team_2"]["win_probability"] = bc.win_probability_from_odds(team_2_odds)
+            
+            # Calculate teams' best bet
+            optimal_t1_bet = bc.optimal_odd_to_bet(team_1_odds)
             optimal_t2_bet = bc.optimal_odd_to_bet(team_2_odds)
+            
+            # Add entries for teams' best money multipliier
+            match["team_1"]["money_multiplier"] = bc.money_multiplier(optimal_t1_bet)
             match["team_2"]["money_multiplier"] = bc.money_multiplier(optimal_t2_bet)
             
+            # Go to next game
             game_counter += 1
+        
         print('Final JSON data formatted successfully.')
         return match_data
+    else:
+        print('Error formatting final JSON data.  Returned fake data.')
+        return bc.get_fake_data() 
 
-# print(json.dumps(get_scraped_json('mlb'), indent=4))
+print(json.dumps(get_scraped_json('nba'), indent=4))
 # get_scraped_json('nba')
+# WORKS FOR INPUTS:
+# mlb
+# nba
+# nhl
+# ufc
+# ncaab (out of season)
+# ncaaf
+# nfl
+# boxing
+# cfl
+# wnba (out of season)
+# tennis/atp
+# tennis/wta
+# esports/dota-2
+# esports/overwatch
+# esports/league-of-legends (many subleagues but work)
+
+# DOESNT WORK FOR INPUTS:
+# soccer (not two outcome format)
+# politics (not head to head format)
+# golf (not head to head format)
