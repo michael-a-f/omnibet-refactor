@@ -161,11 +161,14 @@ def get_matchup_data(page_html, sport, selectors):
             # Get team 1 info
             team_1_container = matchup_container.find('div', class_= selectors["team_1_info"])
             team_1_data = json.loads(team_1_container['data-op-name'])
-
+            team_1_logo = f"../../../img/{sport}-logos/{team_1_data['full_name']}.png"
+            team_1_data["logo"] = team_1_logo
             # Get team 2 info
             team_2_container = matchup_container.find('div', class_= selectors["team_2_info"])
             team_2_data = json.loads(team_2_container["data-op-name"])
-        
+            team_2_logo = f"../../../img/{sport}-logos/{team_2_data['full_name']}.png"
+            team_2_data["logo"] = team_2_logo
+
             # Create the JSON object
             match_data = {
                 "sport": sport,
