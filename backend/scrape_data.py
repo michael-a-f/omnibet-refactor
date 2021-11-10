@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import betting_calculations as bc
+import sys
 
 SELECTORS = {
     "sportsbooks": '.op-book-header img',
@@ -266,26 +267,40 @@ def get_scraped_json(sport_league):
         print('Error formatting final JSON data.  Returned fake data.')
         return bc.get_fake_data() 
 
-print(json.dumps(get_scraped_json('nba'), indent=4))
-# get_scraped_json('nba')
-# WORKS FOR INPUTS:
-# mlb
+
+# Output scraped data in JSON format using 'python scrape_data.py sport'
+# where sport is the sport/league to scrape for.
+if __name__ == '__main__':
+    valid_argument = sys.argv[1] in {'nba', 'nhl', 'ufc', 'ncaab', 'ncaaf',
+    'nfl', 'boxing', 'tennis/atp', 'tennis/wta'}
+    
+    if valid_argument:
+        print(json.dumps(get_scraped_json(sys.argv[1]), indent=4))
+    else:
+        print(f'{sys.argv[1]} is not a supported argument. Try another.')
+
+# CURRENTLY WORKING:
 # nba
 # nhl
 # ufc
-# ncaab (out of season)
+# ncaab
 # ncaaf
 # nfl
 # boxing
-# cfl
-# wnba (out of season)
 # tennis/atp
 # tennis/wta
+
+# WORKS BUT OUT OF SEASON:
+# mlb
+# wnba
+
+# WORKS BUT MINIMAL MATCHES
 # esports/dota-2
 # esports/overwatch
-# esports/league-of-legends (many subleagues but work)
+# esports/league-of-legends
 
-# DOESNT WORK FOR INPUTS:
+# DOESNT WORK:
 # soccer (not two outcome format)
 # politics (not head to head format)
 # golf (not head to head format)
+# cfl (different formatting throws off scraping)
