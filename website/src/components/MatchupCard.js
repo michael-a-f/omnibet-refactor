@@ -26,6 +26,10 @@ const MatchupCard = ({ matchup }) => {
 	let team1WinPct = (matchup.team_1.win_probability * 100).toFixed(0);
 	let team2WinPct = (matchup.team_2.win_probability * 100).toFixed(0);
 
+	if (["boxing", "ufc", "ncaaf", "ncaab"].includes(matchup.sport)) {
+		matchup.team_1.logo = `../../../img/${matchup.sport}.png`;
+		matchup.team_2.logo = `../../../img/${matchup.sport}.png`;
+	}
 	return (
 		<div class="game-card">
 			<div class="game-card-header">
