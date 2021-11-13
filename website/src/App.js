@@ -7,52 +7,71 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const App = () => {
-	// Declare state variables
+	// This state variable controls which sports we scrape odds for, as well
+	// as which sports are displayed in the dropdown to filter by.
 	const [availableSports, setAvailableSports] = useState([
-		// "nba",
+		"nba",
 		"nhl",
-		// "ufc",
-		// "ncaab",
-		// "ncaaf",
-		// "nfl",
+		"ufc",
+		"ncaab",
+		"ncaaf",
+		"nfl",
 		// "boxing",
 	]);
 	const [matchups, setMatchups] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [betAmount, setbetAmount] = useState(25);
+	const [matchupFilters, setmatchupFilters] = useState({
+		sports: availableSports,
+		dates: "all",
+		sort_by: "smartest",
+	});
 
-	// Fetch all odds on the first render of page.
+	const fetchAllMatchups = async () => {
+		// Create HTTP request for each sport-- each sport has own webpage.
+		const httpRequests = [];
+		availableSports.forEach((sport) => {
+			httpRequests.push(axios(`http://127.0.0.1:5000/api/odds/${sport}`));
+		});
+
+		// Await response for all http requests.
+		const response = await Promise.all(httpRequests);
+
+		// Response is list of lists. Loop through and make 1D array of all.
+		const allMatchups = [];
+		response.forEach((sport) => {
+			sport.data.forEach((match) => {
+				allMatchups.push(match);
+			});
+		});
+
+		// 1D array of ALL matchup objects.
+		return allMatchups;
+	};
+
+	// On first render, fetch all odds, set as state, and add to session.
 	useEffect(() => {
-		const fetchAllMatchups = async () => {
-			// Each element of httpRequests array is a sport's HTTP request.
-			const httpRequests = [];
-			availableSports.forEach((sport) => {
-				httpRequests.push(axios(`http://127.0.0.1:5000/api/odds/${sport}`));
-			});
-
-			// Await response for all http requests.
-			const response = await Promise.all(httpRequests);
-
-			// Create array to hold every JSON object and variable as counter.
-			const allMatchups = [];
-			let match_id = 0;
-
-			// Add every match for every sport to array and session storage.
-			response.forEach((sport) => {
-				sport.data.forEach((match) => {
-					allMatchups.push(match);
-					sessionStorage.setItem(match_id, JSON.stringify(match));
-					match_id++;
-				});
-			});
-
-			// Set state to this new array of all the JSON objects.
-			setMatchups(allMatchups);
-			setIsLoading(false);
-		};
-
-		// Runs only on first page load due to empty dependency array.
-		fetchAllMatchups();
+		fetchAllMatchups().then((resolvedMatchups) => {
+			setMatchups(resolvedMatchups);
+			sessionStorage.setItem("odds", JSON.stringify(resolvedMatchups));
+		});
 	}, []);
+
+	// On change to matchupFilters, update matchups array in state.
+	useEffect(() => {
+		// Start with all the matchups held in session.
+		var allMatchups = JSON.parse(sessionStorage.getItem("odds"));
+
+		// Filter for matchups of selected sport with the desired date filter.
+		var displayMatchups = allMatchups.filter((matchup) => {
+			return matchupFilters.sports.includes(matchup.sport);
+		});
+
+		// Sort according to criteria.
+
+		// Update state variable
+		setMatchups(displayMatchups);
+	}, [matchupFilters]);
 
 	return (
 		<div className="App">
@@ -62,7 +81,7 @@ const App = () => {
 				<div className="container">
 					<div className="row">
 						<div id="sidebar" className="col-3">
-							<Sidebar></Sidebar>
+							<Sidebar availableSports={availableSports}></Sidebar>
 						</div>
 						<div id="games" className="col-9">
 							<div className="email d-flex flex-row justify-content-center align-items-center">
@@ -93,7 +112,10 @@ const App = () => {
 								</div>
 							</div>
 
-							<MatchupGrid matchups={matchups}></MatchupGrid>
+							<MatchupGrid
+								matchups={matchups}
+								availableSports={availableSports}
+							></MatchupGrid>
 						</div>
 					</div>
 				</div>
