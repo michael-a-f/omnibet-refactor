@@ -5,17 +5,20 @@ import MatchupGrid from "./components/MatchupGrid";
 import Sidebar from "./components/Sidebar";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Email from "./components/Email";
+import Boxes from "./components/Boxes";
+import SortBar from "./components/SortBar";
 
 const App = () => {
 	// This state variable controls which sports we scrape odds for, as well
 	// as which sports are displayed in the dropdown to filter by.
 	const [availableSports, setAvailableSports] = useState([
 		"nba",
-		"nhl",
-		"ufc",
-		"ncaab",
-		"ncaaf",
-		"nfl",
+		//"nhl",
+		//"ufc",
+		//"ncaab",
+		//"ncaaf",
+		//"nfl",
 		// "boxing",
 	]);
 	const [matchups, setMatchups] = useState([]);
@@ -77,41 +80,17 @@ const App = () => {
 		<div className="App">
 			<Navbar></Navbar>
 			<Showcase></Showcase>
-			<section id="main-content">
+			<Boxes></Boxes>
+
+			<section id="main-content" className="py-5">
 				<div className="container">
 					<div className="row">
 						<div id="sidebar" className="col-3">
 							<Sidebar availableSports={availableSports}></Sidebar>
 						</div>
 						<div id="games" className="col-9">
-							<div className="email d-flex flex-row justify-content-center align-items-center">
-								<form>
-									<label for="email">
-										Sign up for daily emails of the day's best bets.
-									</label>
-									<input type="email" id="email" value="Email"></input>
-
-									<button type="submit" class="btn btn-primary mb-2">
-										Email Me
-									</button>
-								</form>
-							</div>
-							<div className="row justify-content-between">
-								<div className="col-3">
-									<select
-										class="form-select"
-										aria-label="Default select example"
-									>
-										<option selected>Smartest bets first</option>
-										<option value="1">Biggest underdogs first</option>
-										<option value="2">Biggest favorites first</option>
-									</select>
-								</div>
-								<div className="col-3">
-									<p>Showing 1-20 out of {matchups.length} games</p>
-								</div>
-							</div>
-
+							<Email></Email>
+							<SortBar matchupCount={matchups.length}></SortBar>
 							<MatchupGrid
 								matchups={matchups}
 								availableSports={availableSports}
