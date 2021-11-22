@@ -1,4 +1,5 @@
 import React from "react";
+import TeamBet from "./TeamBet";
 
 const MatchupCard = ({ matchup }) => {
 	let mm1 = matchup.team_1.money_multiplier;
@@ -31,57 +32,28 @@ const MatchupCard = ({ matchup }) => {
 		matchup.team_2.logo = `../../../img/${matchup.sport}.png`;
 	}
 	return (
-		<div class="game-card">
-			<div class="game-card-header">
+		<div className="matchup-card mb-4">
+			<div className="matchup-card-header">
 				<p>
 					{matchup.date} @ {matchup.time}
 				</p>
 			</div>
-
-			<div class="teams">
-				<div class="team">
-					<img src={matchup.team_1.logo} alt={matchup.team_1.full_name} />
-					<p>{matchup.team_1.full_name}</p>
-				</div>
-				<div class="divider">
-					<p>@</p>
-				</div>
-				<div class="team">
-					<img src={matchup.team_2.logo} alt={matchup.team_2.full_name} />
-					<p>{matchup.team_2.full_name}</p>
-				</div>
+			<div className="bets d-flex flex-column justify-content-between">
+				{[matchup.team_1, matchup.team_2].map((team, idx) => (
+					<TeamBet
+						key={idx}
+						sport={matchup.sport}
+						team={team}
+						betAmount={betAmount}
+					></TeamBet>
+				))}
 			</div>
-			<div class="bets">
-				<div class="bet" id="better-bet">
-					<div class="title">
-						<p>{matchup.team_1.short_name} Win:</p>
-					</div>
-					<div class="pct">
-						<p>{team1WinPct}% Chance</p>
-					</div>
-					<div class="winning">
-						<p>Win: ${team1WinAmt}</p>
-					</div>
-					<div class="place-bet">
-						<button>Add to Cart</button>
-					</div>
-				</div>
-				<div class="bet-divider"></div>
 
-				<div class="bet">
-					<div class="title">
-						<p>{matchup.team_2.short_name} Win:</p>
-					</div>
-					<div class="pct">
-						<p>{team2WinPct}% Chance</p>
-					</div>
-					<div class="winning">
-						<p>Win: ${team2WinAmt}</p>
-					</div>
-					<div class="place-bet">
-						<button>Add to Cart</button>
-					</div>
-				</div>
+			<div className="bet-details d-flex flex-row justify-content-between align-items-center">
+				<p className="mb-0">Great Bet!</p>
+				<button className="btn btn-primary btn-sm">
+					Bet ${betAmount} on {matchup.team_1.short_name}
+				</button>
 			</div>
 		</div>
 	);
