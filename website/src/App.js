@@ -14,16 +14,16 @@ const App = () => {
 	// as which sports are displayed in the dropdown to filter by.
 	const [availableSports, setAvailableSports] = useState([
 		"nba",
-		//"nhl",
+		"nhl",
 		//"ufc",
-		//"ncaab",
-		//"ncaaf",
-		//"nfl",
+		// "ncaab",
+		// "ncaaf",
+		// "nfl",
 		// "boxing",
 	]);
 	const [matchups, setMatchups] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [betAmount, setbetAmount] = useState(25);
+	const [betAmount, setbetAmount] = useState(200);
 	const [matchupFilters, setmatchupFilters] = useState({
 		sports: availableSports,
 		dates: "all",
@@ -93,7 +93,7 @@ const App = () => {
 							<SortBar matchupCount={matchups.length}></SortBar>
 							<MatchupGrid
 								matchups={matchups}
-								availableSports={availableSports}
+								betAmount={betAmount}
 							></MatchupGrid>
 						</div>
 					</div>
