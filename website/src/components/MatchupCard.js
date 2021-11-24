@@ -1,45 +1,57 @@
 import React from "react";
+import BetGrade from "./BetGrade";
 import TeamBet from "./TeamBet";
+import { useState } from "react";
 
-const MatchupCard = ({ matchup }) => {
-	let mm1 = matchup.team_1.money_multiplier;
-	let mm2 = matchup.team_2.money_multiplier;
-	if (mm1 == null) {
-		mm1 = 0;
-	}
-	if (mm2 == null) {
-		mm2 = 0;
-	}
+const MatchupCard = ({ matchup, betAmount }) => {
+	const teams = [matchup.team_1, matchup.team_2];
 
-	let betAmount = 200;
-	let team1WinAmt = (betAmount * mm1).toFixed(0) - betAmount;
-	let team2WinAmt = (betAmount * mm2).toFixed(0) - betAmount;
+	// Calculate the expected return from the best bet.
+	const getExpectedReturn = (team) => {
+		// None check for sake of using in calculations.
+		let moneyMultiplier = team.money_multiplier;
+		if (moneyMultiplier == null) {
+			moneyMultiplier = 0;
+		}
 
-	let team1ExpVal = (
-		team1WinAmt * matchup.team_1.win_probability -
-		betAmount * (1 - matchup.team_1.win_probability)
-	).toFixed(0);
-	let team2ExpVal = (
-		team2WinAmt * matchup.team_2.win_probability -
-		betAmount * (1 - matchup.team_2.win_probability)
-	).toFixed(0);
+		const winAmount = betAmount * moneyMultiplier - betAmount;
 
-	let team1WinPct = (matchup.team_1.win_probability * 100).toFixed(0);
-	let team2WinPct = (matchup.team_2.win_probability * 100).toFixed(0);
+		const expectedValue =
+			winAmount * team.win_probability - betAmount * (1 - team.win_probability);
+		const expectedReturn = 100 * ((betAmount + expectedValue) / betAmount - 1);
 
-	if (["boxing", "ufc", "ncaaf", "ncaab"].includes(matchup.sport)) {
-		matchup.team_1.logo = `../../../img/${matchup.sport}.png`;
-		matchup.team_2.logo = `../../../img/${matchup.sport}.png`;
-	}
+		return expectedReturn;
+	};
+
+	const getExpectedWinnings = (team) => {
+		// None check for sake of using in calculations.
+		let moneyMultiplier = team.money_multiplier;
+		if (moneyMultiplier == null) {
+			moneyMultiplier = 0;
+		}
+
+		const winAmount = betAmount * moneyMultiplier - betAmount;
+
+		const expectedValue =
+			winAmount * team.win_probability - betAmount * (1 - team.win_probability);
+
+		return expectedValue;
+	};
+
+	teams[0]["expected_return"] = getExpectedReturn(teams[0]);
+	teams[1]["expected_return"] = getExpectedReturn(teams[1]);
+
+	// State variables
+	const [selectedTeam, setSelectedTeam] = useState(matchup.team_1);
+
 	return (
 		<div className="matchup-card mb-4">
-			<div className="matchup-card-header">
-				<p>
-					{matchup.date} @ {matchup.time}
-				</p>
-			</div>
-			<div className="bets d-flex flex-column justify-content-between">
-				{[matchup.team_1, matchup.team_2].map((team, idx) => (
+			<p className="matchup-card-header">
+				{matchup.date} @ {matchup.time}
+			</p>
+
+			<div className="card-body d-flex flex-column justify-content-between">
+				{teams.map((team, idx) => (
 					<TeamBet
 						key={idx}
 						sport={matchup.sport}
@@ -49,12 +61,11 @@ const MatchupCard = ({ matchup }) => {
 				))}
 			</div>
 
-			<div className="bet-details d-flex flex-row justify-content-between align-items-center">
-				<p className="mb-0">Great Bet!</p>
-				<button className="btn btn-primary btn-sm">
-					Bet ${betAmount} on {matchup.team_1.short_name}
-				</button>
-			</div>
+			<BetGrade
+				expectedWinnings={getExpectedWinnings(selectedTeam)}
+				betAmount={betAmount}
+				teamName={selectedTeam.short_name}
+			></BetGrade>
 		</div>
 	);
 };
