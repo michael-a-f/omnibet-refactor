@@ -38,12 +38,12 @@ const Navbar = () => {
 							</a>
 						</li>
 						<li className="nav-item">
-							<a href="#instructors" className="nav-link">
+							<a href="" className="nav-link">
 								How it Works
 							</a>
 						</li>
 						<li className="nav-item">
-							<a href="#instructors" className="nav-link">
+							<a href="" className="nav-link">
 								Looking Ahead
 							</a>
 						</li>
