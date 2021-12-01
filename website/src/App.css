@@ -1,80 +1,88 @@
 /* RESETS */
 * {
-	box-sizing: border-box;
-	margin: 0;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 /* SHOWCASE */
 #showcase-img {
-	width: 20rem;
+  width: 20rem;
 }
 
 /* SIDEBAR */
 .sidebar {
-	background-color: #f4f5f5;
-	padding: 1rem;
-	height: 100%;
-	border-radius: 2px;
-	border: 1px solid #cccccc;
-	min-width: 306px;
+  background-color: #f4f5f5;
+  padding: 1rem;
+  height: 100%;
+  border-radius: 2px;
+  border: 1px solid #cccccc;
+  /* min-width: 306px; */
 }
 
 .sidebar h2 {
-	margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .sidebar select {
-	margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .sidebar label {
-	margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 /* EMAIL BANNER */
 .email {
-	background-color: #cceaff;
+  background-color: #cceaff;
 }
 
 .email .input-group {
-	max-width: 400px;
+  max-width: 400px;
+}
+
+/* MATCHUP GRID */
+.matchup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
 }
 
 /* MATCHUP CARD */
 .matchup-card {
-	width: 450px;
-	/* border: 1px solid #cccccc; */
-	padding: 1rem 0rem;
-	background-color: #ffffff;
-	/* border-radius: 0.5rem; */
-	border: 1px solid #cccccc;
+  /* width: 450px; */
+  /* border: 1px solid #cccccc; */
+  padding: 1rem 0rem;
+  background-color: #ffffff;
+  /* border-radius: 0.5rem; */
+  border: 1px solid #cccccc;
 }
 
 .matchup-card-header {
-	padding-left: 1.5rem;
+  padding-left: 1rem;
 }
 
 .card-body {
-	/* height: 165px; */
-	padding: 0.7rem;
+  /* height: 165px; */
+  padding: 0.7rem;
 }
 
 .bet-details {
-	padding: 0rem 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 /* BETS CONTAINER */
 .bets {
-	height: 170px;
-	margin-bottom: 2rem;
+  height: 170px;
+  margin-bottom: 2rem;
 }
 /* BET */
 .bet {
-	background-color: #f4f5f5;
-	border: 1px solid #cccccc;
+  background-color: #f4f5f5;
+  border: 1px solid #cccccc;
 }
 
 #middle {
-	border-left: 1px solid #cccccc;
-	border-right: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
 }
