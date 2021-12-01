@@ -15,7 +15,7 @@ const App = () => {
 	const [availableSports, setAvailableSports] = useState([
 		"nba",
 		"nhl",
-		//"ufc",
+		// "ufc",
 		// "ncaab",
 		// "ncaaf",
 		// "nfl",
@@ -81,15 +81,17 @@ const App = () => {
 			<Navbar></Navbar>
 			<Showcase></Showcase>
 			<Boxes></Boxes>
-
-			<section id="main-content" className="py-5">
-				<div className="container">
+			<section id="main-content">
+				<div className="container py-5">
 					<div className="row">
-						<div id="sidebar" className="col-3">
-							<Sidebar availableSports={availableSports}></Sidebar>
+						<div className="col-xl-3 pb-4">
+							<Sidebar
+								availableSports={availableSports}
+							></Sidebar>
 						</div>
-						<div id="games" className="col-9">
+						<div className="col-xl-9">
 							<Email></Email>
+
 							<SortBar matchupCount={matchups.length}></SortBar>
 							<MatchupGrid
 								matchups={matchups}
