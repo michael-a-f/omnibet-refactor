@@ -137,9 +137,15 @@ def scrape_from_command_line(sport_league):
     Returns:
         List: JSON objects holding matchup info and odds for each match.
     """
-    # Request URL and create BS4 object.
+    # Request URL and create BS4 object. Proxy IP address used to bypass
+    # content restriction due to state legislation. Proxy address found 
+    # using https://hidemy.name/en/proxy-list/
     url = f'https://www.oddsshark.com/{sport_league}/odds'
-    http_response = requests.get(url)
+    proxies = {
+        "http": "http://51.81.155.78:3128", # Hillsboro, Oregon
+        "https": "http://51.81.155.78:3128", # Hillsboro, Oregon
+    }
+    http_response = requests.get(url, proxies=proxies)
     
     try:
         http_response.raise_for_status()
