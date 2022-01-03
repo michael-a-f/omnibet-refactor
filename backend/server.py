@@ -54,9 +54,15 @@ def get_odds_for_sport(sport_league):
     """
     selectors = scraper.SELECTORS
    
-    # Request URL and create BS4 object.
+    # Request URL and create BS4 object. Proxy IP address used to bypass
+    # content restriction due to state legislation. Proxy address found 
+    # using https://hidemy.name/en/proxy-list/
     url = f'https://www.oddsshark.com/{sport_league}/odds'
-    http_response = requests.get(url)
+    proxies = {
+        "http": "http://51.81.155.78:3128", # Hillsboro, Oregon
+        "https": "http://51.81.155.78:3128", # Hillsboro, Oregon
+    }
+    http_response = requests.get(url, proxies=proxies)
     
     try:
         http_response.raise_for_status()
