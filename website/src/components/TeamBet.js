@@ -5,8 +5,7 @@ const TeamBet = ({
 	team,
 	selectedTeam,
 	profitOnWin,
-	expectedProfit,
-	toggleSelectedTeam,
+	setSelectedTeam,
 }) => {
 	// Modify logo filepath for sports without team-specific logos.
 	if (["boxing", "ufc", "ncaaf", "ncaab"].includes(sport)) {
@@ -22,11 +21,11 @@ const TeamBet = ({
 					? "selected bet row align-items-center"
 					: "bet row align-items-center"
 			}
-			onClick={() => toggleSelectedTeam(team)}
+			onClick={() => setSelectedTeam(team)}
 		>
 			<div className="col text-center">
 				<img
-					className="img-fluid"
+					className="team-logo img-fluid"
 					src={team.logo}
 					alt={team.full_name}
 					style={{ width: "4.5rem" }}
@@ -40,10 +39,6 @@ const TeamBet = ({
 				<p className="m-0">${profitOnWin.toFixed(0)}</p>
 				<p className="m-0">To Win</p>
 			</div>
-			{/* <div className="col text-center">
-				<p className="m-0">${expectedProfit.toFixed(2)}</p>
-				<p className="m-0">Exp. Profit</p>
-			</div> */}
 		</div>
 	);
 };
