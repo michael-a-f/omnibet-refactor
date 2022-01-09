@@ -4,11 +4,54 @@
 	margin: 0;
 }
 
+/* NAVBAR */
+nav {
+	border-bottom: 1px solid #e6e8e9;
+	box-shadow: rgb(50 50 50 / 15%) 0px 0.0625rem 0.1875rem 0px;
+}
+
+.navbar-brand {
+	font-family: "Zen Dots", cursive;
+	font-size: 2.5rem;
+}
+
+.navbar-brand p {
+	font-size: 1rem;
+	margin: 0;
+	padding-left: 7rem;
+	line-height: 0.1rem;
+}
+
+.navbar-brand img {
+	width: 5rem;
+	padding-right: 1rem;
+	filter: brightness(195%);
+}
 /* SHOWCASE */
+
 #showcase-img {
 	width: 20rem;
 }
 
+button.cta {
+	width: 300px;
+	background-color: black;
+	color: white;
+	border: none;
+	border-radius: 2rem;
+	font-size: 1.5rem;
+	text-transform: uppercase;
+	font-weight: 700;
+	padding: 1rem 0rem;
+	box-shadow: 0 8px 32px -8px rgb(0 112 246 / 40%),
+		0 16px 32px -16px rgb(7 29 43 / 16%);
+}
+
+/* PARTNERS */
+#partners {
+	background-color: #cceaff;
+	border-bottom: 1px solid #e6e8e9;
+}
 /* SIDEBAR */
 .sidebar {
 	background-color: #f4f5f5;
@@ -31,12 +74,21 @@
 	margin-top: 2rem;
 }
 
-/* EMAIL BANNER */
-.email {
-	background-color: #cceaff;
+/* BET AMOUNT SLIDER */
+.slider-parent {
+	position: relative;
 }
 
-.email .input-group {
+.bubble {
+	position: absolute;
+}
+/* EMAIL BANNER */
+#email {
+	color: white;
+	background-color: #000000;
+}
+
+#email .input-group {
 	max-width: 400px;
 }
 
@@ -44,7 +96,7 @@
 .matchup-grid {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	gap: 2rem;
+	gap: 1.5rem;
 }
 
 /* MATCHUP CARD */
@@ -69,16 +121,35 @@
 	padding: 0.5rem;
 }
 
+/* TEAM LOGOS */
+.team-logo {
+	pointer-events: none;
+}
+
 .bet-details {
 	padding: 1rem;
 }
 
-.bet-grade {
+/* BET GRADE */
+.bet-grade-icon {
+	width: 2rem;
+	margin-right: 0.4rem;
+	pointer-events: none;
+}
+
+.bet-grade-text p {
+	margin: 0;
+	line-height: 1.2rem;
 	/* font-size: 0.8rem; */
 }
 
 .bet-grade-remark {
-	/* font-size: 1.1rem; */
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.bet-grade-roi {
+	font-size: 0.9rem;
 }
 
 /* BET */
@@ -89,6 +160,6 @@
 
 /* SELECTED BET */
 .selected.bet {
-	box-shadow: 0px 0px 7px green;
-	background-color: #cccccc;
+	box-shadow: 0px 0px 7px #cccccc;
+	background-color: #cceaff;
 }
