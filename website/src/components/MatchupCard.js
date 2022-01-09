@@ -6,15 +6,50 @@ import { useState } from "react";
 const MatchupCard = ({
 	matchup,
 	betAmount,
-	getProfitOnWin,
-	getExpectedProfit,
-	getExpectedROI,
-	getBetterTeamToBet,
+	// getProfitOnWin,
+	// getExpectedProfit,
+	// getBetterTeamToBet,
 }) => {
+	const getProfitOnWin = (betAmount, team) => {
+		return betAmount * (team.money_multiplier - 1);
+	};
+
+	const getExpectedProfit = (betAmount, team) => {
+		const profitOnWin = getProfitOnWin(betAmount, team);
+		return (
+			profitOnWin * team.win_probability -
+			betAmount * (1 - team.win_probability)
+		);
+	};
+
+	const getBetterTeamToBet = (matchup) => {
+		if (
+			getExpectedProfit(betAmount, matchup.team_1) >=
+			getExpectedProfit(betAmount, matchup.team_2)
+		) {
+			return matchup.team_1;
+		} else {
+			return matchup.team_2;
+		}
+	};
 	// Default selection is the team with highest expected ROI.
 	const [selectedTeam, setSelectedTeam] = useState(() =>
 		getBetterTeamToBet(matchup)
 	);
+
+	// const profitonWin = getProfitOnWin(betAmount, selectedTeam);
+	// const expectedProfit = getExpectedProfit(betAmount, selectedTeam);
+	const profitOnWin = betAmount * (selectedTeam.money_multiplier - 1);
+	const expectedProfit =
+		profitOnWin * selectedTeam.win_probability -
+		betAmount * (1 - selectedTeam.win_probability);
+	const expectedROI = (betAmount + expectedProfit) / betAmount - 1;
+
+	// const expectedROI = betAmount + expectedProfit;
+	const getExpectedROI = (betAmount, team) => {
+		const expectedReturn = getExpectedProfit(betAmount, team);
+		return (betAmount + expectedReturn) / betAmount - 1;
+	};
 
 	// When matchup changes, recalculate the better team to bet on.
 	useEffect(() => {
@@ -23,37 +58,54 @@ const MatchupCard = ({
 
 	// When the selected bet changes, compute its expected ROI to use
 	// in grading the bet.
-	let selectedTeamsExpectedROI = getExpectedROI(selectedTeam);
-	useEffect(() => {
-		selectedTeamsExpectedROI = getExpectedROI(selectedTeam);
-	}, [selectedTeam]);
+	let selectedTeamsExpectedROI = getExpectedROI(betAmount, selectedTeam);
+	// useEffect(() => {
+	// 	selectedTeamsExpectedROI = getExpectedROI(betAmount, selectedTeam);
+	// }, [selectedTeam]);
 
 	const title = `${matchup.sport.toUpperCase()}: ${matchup.team_1.full_name} @ 
-  ${matchup.team_2.full_name}`;
-	const datetime = `${matchup.date} ${matchup.time}`;
+  	${matchup.team_2.full_name}`;
 
-	const betGrade = (ROI) => {
-		let grade;
-		if (ROI < 4) {
-			grade = "Poor";
-		} else if (ROI >= 4 && ROI < 7) {
-			grade = "OK";
-		} else if (ROI >= 7 && ROI < 16) {
-			grade = "Good";
-		} else if (ROI >= 16 && ROI < 25) {
-			grade = "Great";
-		} else if (ROI >= 25) {
-			grade = "Excellent";
-		}
-		grade = `${grade} Bet`;
-		return grade;
-	};
+	// Convert backend datetime to "Mon, Jan 1 12:00PM" format.
+	const datetime = new Date(matchup.datetime);
+	const months = [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sept",
+		"Oct",
+		"Nov",
+		"Dec",
+	];
+	const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	const shortMonth = months[datetime.getMonth()];
+	const dayOfWeek = days[datetime.getDay()];
+	const dayNumber = datetime.getDate();
+	let hr = datetime.getHours();
+	let min = datetime.getMinutes();
+	if (min < 10) {
+		min = "0" + min;
+	}
+	let ampm = "AM";
+	if (hr > 12) {
+		hr -= 12;
+		ampm = "PM";
+	}
+	const formatted_date = `${dayOfWeek}, ${shortMonth} ${dayNumber}`;
+	const formatted_time = `${hr}:${min}${ampm}`;
 
 	return (
 		<div className="matchup-card d-flex flex-column justify-content-between">
 			<div className="matchup-card-header">
 				<p className="m-0">{title}</p>
-				<p className="matchup-date">{datetime}</p>
+				<p className="matchup-date">
+					{formatted_date} {formatted_time}
+				</p>
 			</div>
 
 			<div className="matchup-card-body">
@@ -63,33 +115,18 @@ const MatchupCard = ({
 						sport={matchup.sport}
 						team={team}
 						selectedTeam={selectedTeam}
-						profitOnWin={getProfitOnWin(team)}
-						expectedProfit={getExpectedProfit(team)}
-						toggleSelectedTeam={setSelectedTeam}
+						profitOnWin={getProfitOnWin(betAmount, team)}
+						expectedProfit={getExpectedProfit(betAmount, team)}
+						setSelectedTeam={setSelectedTeam}
 					></TeamBet>
 				))}
 			</div>
 
-			{/* <BetGrade
-        betAmount={betAmount}
-        team={selectedTeam}
-        expectedProfit={getExpectedProfit(selectedTeam)}
-        expectedROI={getExpectedROI(selectedTeam)}
-      ></BetGrade> */}
-			<div className="bet-details d-flex flex-row justify-content-between align-items-end">
-				<div>
-					<p className="bet-grade-remark mb-0">
-						{betGrade(selectedTeamsExpectedROI)}
-					</p>
-					<p className="bet-grade mb-0">
-						{(100 * selectedTeamsExpectedROI).toFixed(2)}% ROI
-					</p>
-				</div>
-
-				<button className="btn btn-primary btn-sm">
-					Bet ${betAmount} on {selectedTeam.short_name}
-				</button>
-			</div>
+			<BetGrade
+				betAmount={betAmount}
+				selectedTeam={selectedTeam}
+				expectedROI={expectedROI}
+			></BetGrade>
 		</div>
 	);
 };
