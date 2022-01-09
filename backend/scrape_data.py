@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import betting_calculations as bc
 import sys
+from datetime import datetime
 
 # CSS class selectors for use by BS4.
 SELECTORS = {
@@ -17,6 +18,8 @@ SELECTORS = {
     "team_2_odds": '.op-second-row .op-item.op-spread'
 }
 
+# The sports available to scrape for.
+SPORTS = ["nba", "nhl", "ufc", "ncaab", "ncaaf", "nfl", "boxing",]
 
 def scrape_matchups(sport, matchup_containers, selectors):
     """Creates list of JSON object for each matchup in the container.
@@ -34,7 +37,32 @@ def scrape_matchups(sport, matchup_containers, selectors):
         container_above = matchup_container.previous_sibling
         is_date_new = selectors["gamedates"] in container_above['class']
         if is_date_new:
-            date = json.loads(container_above['data-op-date'])["full_date"]
+            # date
+            raw_date = json.loads(container_above['data-op-date'])["full_date"].split()
+            month_string = raw_date[1]
+            day_string = raw_date[2]
+            month_to_integer = {
+            "January": 1,
+            "February": 2,
+            "March": 3, 
+            "April": 4,
+            "May": 5,
+            "June": 6,
+            "July": 7,
+            "August": 8,
+            "September": 9,
+            "October": 10,
+            "November": 11,
+            "December": 12,
+            }
+            month = month_to_integer[month_string]
+            day = int(day_string)
+            year = datetime.today().year
+            
+            date = [year, month, day]
+
+            
+
         matchup = create_matchup_dict(matchup_container, sport, date, selectors)
         matchups.append(matchup)
     return matchups
@@ -46,7 +74,7 @@ def create_matchup_dict(matchup_container, sport, date, selectors):
     Args:
         matchup_container (NavigableString): The HTML for a single matchup.
         sport (string): The sport on oddsshark.com to scrape odds for.
-        date (string): The date of the matchup.
+        date (list): [year, month, day] where elements are integers.
         selectors (dict): CSS class selectors for use by BS4.
 
     Returns:
@@ -62,14 +90,22 @@ def create_matchup_dict(matchup_container, sport, date, selectors):
     team_2 = json.loads(team_2_container['data-op-name'])
     team_2["logo"] = f"../../../img/{sport}-logos/{team_2['full_name']}.png"
 
-    # Get the time of the matchup
-    time = matchup_container.find('div', class_= selectors["gametimes"]).get_text()
+    # Get the time
+    raw_time = matchup_container.find('div', class_= selectors["gametimes"]).get_text()
+    is_pm = raw_time[-1] == "p"
+    time = raw_time[:-1].split(":")
+    hour = int(time[0])
+    if is_pm:
+        hour = hour + 12
+    minute = int(time[1])
+   
+    # Create datetime object using date and time
+    date_time = datetime(date[0], date[1], date[2], hour, minute)
 
     # Create the object to return
     match_data = {
         "sport": sport,
-        "date": date,
-        "time": time,
+        "datetime": str(date_time),
         "team_1": team_1,
         "team_2": team_2
     }
@@ -94,11 +130,15 @@ def scrape_odds(odds_container, sportsbooks, selectors):
     matchup_has_no_odds = 'no-odds-wrapper' in odds_container['class']
     if matchup_has_no_odds:
         empty_odds = {sportsbooks[i]: None for i in range(len(sportsbooks))}
-        matchup_odds["team_1"] = matchup_odds["team_2"] = empty_odds
+        matchup_odds["team_1"] = empty_odds
+        matchup_odds["team_2"] = empty_odds
     else:
+        
         # Scrape team 1's odds
         t1_containers = odds_container.select(selectors["team_1_odds"])
+        # print(t1_containers)
         t1_odds = [scrape_odds_from_container(container) for container in t1_containers]
+        # print(t1_odds)
         matchup_odds["team_1"] = {sportsbooks[i]: t1_odds[i] for i in range(len(sportsbooks))}
         
         # Scrape team 2's odds
@@ -125,50 +165,50 @@ def scrape_odds_from_container(odds_container):
         return None
 
 
-# This code is identical to the code that runs on the endpoint in server.py.
-# I've includes this here so that I can test from cmd without starting the
-# Flask server.
-def scrape_from_command_line(sport_league):
-    """Scrape oddshark.com for sports gambling information and formats in JSON.
-    
-    Args:
-        sport_league (string): The name of the sport league to scrape info for.
-    
-    Returns:
-        List: JSON objects holding matchup info and odds for each match.
-    """
-    # Request URL and create BS4 object. Proxy IP address used to bypass
-    # content restriction due to state legislation. Proxy address found 
-    # using https://hidemy.name/en/proxy-list/
-    url = f'https://www.oddsshark.com/{sport_league}/odds'
-    proxies = {
-        "http": "http://51.81.155.78:3128", # Hillsboro, Oregon
-        "https": "http://51.81.155.78:3128", # Hillsboro, Oregon
-    }
-    http_response = requests.get(url, proxies=proxies)
-    
-    try:
-        http_response.raise_for_status()
-        page_html = BeautifulSoup(http_response.content, 'html.parser')
-    except:
-        return bc.get_fake_data(sport_league)
+def scrape_sportsbook_names(page_bs4, selectors):
+    sportsbook_images = page_bs4.select(selectors["sportsbooks"])
+    names = [image["alt"].lower().strip() for image in sportsbook_images]
+    return names
 
-    # The sportsbook names are held in the 'alt' attribute of their images.
-    sportsbook_images = page_html.select(SELECTORS["sportsbooks"])
-    sportsbooks = [image['alt'].lower().strip() for image in sportsbook_images]
+
+def scrape_data_for(sport):
+    # Send request using Proxy to bypass content restriction due to IP location. 
+    # Handle exceptions by returning "fake" i.e. old data.
+    url = f'https://www.oddsshark.com/{sport}/odds'
+    proxies = {
+        "http": "http://51.81.155.78:3128", # Florida
+        "https": "http://51.81.155.78:3128", # Florida
+    }
+    try:
+        http_response = requests.get(url, proxies=proxies)
+        http_response.raise_for_status()  
+    except requests.exceptions.HTTPError as err_http:
+        return bc.get_fake_data(sport)
+    except requests.exceptions.ConnectionError as err_conn:
+        return bc.get_fake_data(sport)
+    except requests.exceptions.Timeout as err_time:
+        return bc.get_fake_data(sport)
+    except requests.exceptions.ProxyError as err_proxy:
+        return bc.get_fake_data(sport)
+    else:
+        page_bs4 =  BeautifulSoup(http_response.content, 'html.parser')
     
-    # Find all containers holding matchup info and create matchup dict for each one.
-    matchup_containers = page_html.find_all('div', class_= SELECTORS["matchups"])
-    matchups = scrape_matchups(sport_league, matchup_containers, SELECTORS)
+    # Scrape sportsbook names
+    sportsbook_names = scrape_sportsbook_names(page_bs4, SELECTORS)
+
+    # Scrape the left-hand containers holding matchup info only.
+    matchup_containers = page_bs4.find_all('div', class_= SELECTORS["matchups"])
+    matchups = scrape_matchups(sport, matchup_containers, SELECTORS)
 
     # Find all the game odds containers and create odds dict for each one.
-    odds_containers = page_html.select(SELECTORS["odds"])
-    odds = [scrape_odds(odds_container, sportsbooks, SELECTORS) for odds_container in odds_containers]
+    odds_containers = page_bs4.select(SELECTORS["odds"])
+    odds = []
+    for container in odds_containers:
+        odds.append(scrape_odds(container, sportsbook_names, SELECTORS))
     
     # Check that every matchup has a corresponding odds dict.
     is_scraped_correctly = len(matchups) == len(odds)
 
-    # Add info from odds dict to the matchup dict to create desired output.
     if is_scraped_correctly:
         try:
             current_matchup = 0
@@ -182,14 +222,13 @@ def scrape_from_command_line(sport_league):
                     max_profit_odd = bc.optimal_odd_to_bet(team_odds)
                     matchup[team]["money_multiplier"] = bc.money_multiplier(max_profit_odd)
                     matchup[team]["win_probability"] = bc.win_probability_from_odds(team_odds)
-                
-                # Maintain correct matchup dict to odds dict pairing.
+            
                 current_matchup += 1
             return matchups
         except:
-            return bc.get_fake_data(sport_league)
+            return bc.get_fake_data(sport)
     else:
-        return bc.get_fake_data(sport_league)
+        return bc.get_fake_data(sport)
 
 
 # Scrape for given sport by running 'python scrape_data.py sport' in cmd.
@@ -198,6 +237,6 @@ if __name__ == '__main__':
     'nfl', 'boxing'}
     
     if valid_sport:
-        print(json.dumps(scrape_from_command_line(sys.argv[1]), indent=4))
+        print(json.dumps(scrape_data_for(sys.argv[1]), indent=4))
     else:
         print(f'{sys.argv[1]} is not a supported argument. Try another.')
