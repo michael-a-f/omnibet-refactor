@@ -53,7 +53,7 @@ def money_multiplier(odd):
     """Returns the factor by which a bet amount gets multiplied if it wins.
     """
     if not odd or odd == 0:
-        return None
+        return 0
 
     if odd > 0:
         money_multiplier = (100 + odd) / 100
