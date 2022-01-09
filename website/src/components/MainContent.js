@@ -14,7 +14,7 @@ const MainContent = ({ availableSports }) => {
 		sort_by: "smartest",
 		page: 1,
 	});
-	const [betAmount, setbetAmount] = useState(200);
+	const [betAmount, setBetAmount] = useState(200);
 	const [matchups, setMatchups] = useState([]);
 
 	// Fetch matchups from API for all available sports and return in array.
@@ -58,9 +58,9 @@ const MainContent = ({ availableSports }) => {
 				break;
 			case "dates-filter":
 				if (eventTarget.value === "all") {
-					setmatchupFilters({ ...matchupFilters, dates: ["today", "future"] });
+					setmatchupFilters({ ...matchupFilters, dates: "all" });
 				} else {
-					setmatchupFilters({ ...matchupFilters, dates: [eventTarget.value] });
+					setmatchupFilters({ ...matchupFilters, dates: eventTarget.value });
 				}
 				break;
 			case "sort-by":
@@ -80,10 +80,12 @@ const MainContent = ({ availableSports }) => {
 							availableSports={availableSports}
 							matchupFilters={matchupFilters}
 							onFilterMatchups={filterMatchups}
+							betAmount={betAmount}
+							setBetAmount={setBetAmount}
 						/>
 					</div>
 					<div className="col-xl-9">
-						<Email />
+						{/* <Email /> */}
 						<SortBar
 							matchupCount={matchups.length}
 							onFilterMatchups={filterMatchups}
