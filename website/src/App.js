@@ -3,17 +3,18 @@ import Navbar from "./components/Navbar";
 import Showcase from "./components/Showcase";
 import Boxes from "./components/Boxes";
 import Footer from "./components/Footer";
-import MainContent from "./components/MainContent";
+import OmniBet from "./components/OmniBet";
 import Email from "./components/Email";
+import APIFetch from "./components/APIFetch";
 
 const App = () => {
 	const AVAILABLE_SPORTS = [
-		// "nba",
+		"nba",
 		"nhl",
-		// "ufc",
+		"ufc",
 		// "ncaab",
 		// "ncaaf",
-		"nfl",
+		// "nfl",
 		// "boxing",
 	];
 
@@ -23,7 +24,7 @@ const App = () => {
 			<Showcase />
 			<Boxes />
 			<Email />
-			<MainContent availableSports={AVAILABLE_SPORTS} />
+			<APIFetch availableSports={AVAILABLE_SPORTS} />
 			<Footer />
 		</div>
 	);
