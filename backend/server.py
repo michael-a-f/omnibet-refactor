@@ -44,11 +44,14 @@ def proxy_exception_handler(error):
     In the event of an error with the Proxy being used, our solution is to
     simply return the data from the most recent, successful response for the 
     given sport. The sport causing the error is passed into the description 
-    parameter (second positional argument) in the abort() method.
+    parameter (second positional argument) of the abort() method. 
+    
+    We override the status code here to 203 in order to "trick" the front-end 
+    promise into thinking that the fetch was successful.
     """
     sport_causing_err = error.description
     placeholder_response = bc.get_fake_data(sport_causing_err)
-    return jsonify(placeholder_response), 500
+    return jsonify(placeholder_response), 203
 
 
 @app.errorhandler(Exception)
@@ -56,11 +59,14 @@ def unhandled_exception_handler(error):
     """Handle errors unhandled elsewhere.
     
     Just to be safe and to preserve site functionality, any unhandled
-    exceptions will return the most recent, successful request
+    exceptions will return the most recent, successful request.
+
+    We override the status code here to 203 in order to "trick" the front-end 
+    promise into thinking that the fetch was successful.
     """
     sport_causing_err = error.description
     placeholder_response = bc.get_fake_data(sport_causing_err)
-    return jsonify(placeholder_response), 500
+    return jsonify(placeholder_response), 203
 
 
 # Endpoint
@@ -90,8 +96,8 @@ def get_odds_for_sport(sport):
     # Send request using Proxy to bypass content restriction due to IP location. 
     url = f'https://www.oddsshark.com/{sport}/odds'
     proxies = {
-        "http": "http://51.81.155.78:3128", # Florida
-        "https": "http://51.81.155.78:3128", # Florida
+        "http": "http://52.183.8.192:3128", # Florida
+        "https": "http://52.183.8.192:3128", # Florida
     }
     
     # Catch various exceptions and handle using functions above. Otherwise,
