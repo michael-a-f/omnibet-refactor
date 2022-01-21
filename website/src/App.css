@@ -5,7 +5,7 @@
 }
 
 /* NAVBAR */
-nav {
+.navbar {
 	border-bottom: 1px solid #e6e8e9;
 	box-shadow: rgb(50 50 50 / 15%) 0px 0.0625rem 0.1875rem 0px;
 }
