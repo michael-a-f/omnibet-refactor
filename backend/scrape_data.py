@@ -19,7 +19,7 @@ SELECTORS = {
 }
 
 # The sports available to scrape for.
-SPORTS = ["nba", "nhl", "ufc", "ncaab", "ncaaf", "nfl", "boxing",]
+SPORTS = {"nba", "nhl", "ufc", "ncaab", "ncaaf", "nfl", "boxing"}
 
 def scrape_matchups(sport, matchup_containers, selectors):
     """Creates list of JSON object for each matchup in the container.
@@ -97,6 +97,8 @@ def create_matchup_dict(matchup_container, sport, date, selectors):
     hour = int(time[0])
     if is_pm:
         hour = hour + 12
+        if hour == 24:
+            hour = 12
     minute = int(time[1])
    
     # Create datetime object using date and time
@@ -176,8 +178,8 @@ def scrape_data_for(sport):
     # Handle exceptions by returning "fake" i.e. old data.
     url = f'https://www.oddsshark.com/{sport}/odds'
     proxies = {
-        "http": "http://51.81.155.78:3128", # Florida
-        "https": "http://51.81.155.78:3128", # Florida
+        "http": "http://52.183.8.192:3128", # Florida
+        "https": "http://52.183.8.192:3128", # Florida
     }
     try:
         http_response = requests.get(url, proxies=proxies)
