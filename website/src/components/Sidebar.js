@@ -11,8 +11,10 @@ const Sidebar = ({
 	return (
 		<div className="sidebar">
 			<div className="d-flex flex-row justify-content-between align-items-center mb-2">
-				<p>Bet Amount</p>
-				<p>${betAmount}</p>
+				<p className="side-header">Bet Amount</p>
+				<p id="bet-amount" className="side-header">
+					${betAmount}
+				</p>
 			</div>
 
 			<input
@@ -26,7 +28,7 @@ const Sidebar = ({
 				id="bet-amount-slider"
 			></input>
 			<hr />
-			<p>Filter by Sport</p>
+			<p className="side-header">Filter by Sport</p>
 			<select
 				id="sports-filter"
 				className="form-select mb-4"
@@ -42,7 +44,7 @@ const Sidebar = ({
 					</option>
 				))}
 			</select>
-			<p>Filter by Date</p>
+			<p className="side-header">Filter by Date</p>
 			<select
 				id="dates-filter"
 				className="form-select mb-4"
